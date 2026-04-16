@@ -575,7 +575,7 @@ export default function LuciqPage() {
                             <input
                               autoFocus
                               type="email"
-                              placeholder="agent@wemoney.com.au"
+                              placeholder="agent@wesupport.com.au"
                               value={assignEmail}
                               onChange={e => setAssignEmail(e.target.value)}
                               onKeyDown={e => {

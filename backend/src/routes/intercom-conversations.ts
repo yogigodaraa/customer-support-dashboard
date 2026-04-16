@@ -86,7 +86,7 @@ const MOCK_CONVERSATIONS = [
       },
       {
         id: "ic_msg_002_2",
-        from: { name: "WeMoney Bot", type: "bot" },
+        from: { name: "WeSupport Bot", type: "bot" },
         body: "Hi there! 👋 Great question about improving your credit score. Here are some quick tips:\n\n• Pay bills on time (biggest factor!)\n• Reduce your credit card balances\n• Don't apply for multiple credits at once\n• Keep old credit accounts open\n\nA human agent will follow up with personalised advice shortly!",
         created_at: h(4.9),
         is_inbound: false,
@@ -203,7 +203,7 @@ const MOCK_CONVERSATIONS = [
       },
       {
         id: "ic_msg_005_2",
-        from: { name: "WeMoney Bot", type: "bot" },
+        from: { name: "WeSupport Bot", type: "bot" },
         body: "Hi! We're sorry to see you go 😢\n\nTo delete your account, you can:\n1. Go to Settings → Account → Delete Account in the app\n\nOr let us know here and an agent will process your request.\n\nPlease note: This action is irreversible and your data will be removed within 30 days per our privacy policy.",
         created_at: h(11.9),
         is_inbound: false,
@@ -242,7 +242,7 @@ const MOCK_CONVERSATIONS = [
       {
         id: "ic_msg_006_2",
         from: { name: "Yogender", type: "agent" },
-        body: "Hi Sarah! I can see the issue — your referral link had an encoding problem. I've generated a fresh link for you. Please try sharing this one: wemoney.com.au/ref/SARAH2025\n\nLet me know if this works! 🙌",
+        body: "Hi Sarah! I can see the issue — your referral link had an encoding problem. I've generated a fresh link for you. Please try sharing this one: wesupport.com.au/ref/SARAH2025\n\nLet me know if this works! 🙌",
         created_at: d(2),
         is_inbound: false,
       },

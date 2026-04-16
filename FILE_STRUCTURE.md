@@ -18,7 +18,7 @@
 ## 🎯 Root Level Files
 
 ```
-/Users/intern/Downloads/wemoney/wesupport/
+wesupport/
 ├── package.json                # Workspace root configuration
 ├── README.md                   # Main documentation
 ├── BUILD_SUMMARY.md            # Build overview

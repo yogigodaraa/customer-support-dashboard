@@ -7,7 +7,7 @@ import logger from "../utils/logger.js";
 const router = Router();
 const prisma = new PrismaClient();
 
-// Default WeMoney-style templates seeded on first load
+// Default WeSupport-style templates seeded on first load
 const DEFAULT_TEMPLATES = [
   {
     title: "Insufficient Documents",
@@ -28,7 +28,7 @@ If you have any questions, please don't hesitate to reach out.
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
   {
     title: "Driver's License Failed",
@@ -48,7 +48,7 @@ We'll complete your verification as soon as we receive it.
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
   {
     title: "Medicare Failed",
@@ -66,7 +66,7 @@ Please resend a clear photo of your Medicare card and we'll complete your verifi
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
   {
     title: "Account Successfully Verified",
@@ -75,7 +75,7 @@ WeMoney Member Success`,
 
 Great news — your identity has been successfully verified! 🎉
 
-Your WeMoney account is now fully active. You can now access all features including:
+Your WeSupport account is now fully active. You can now access all features including:
 • Credit score monitoring
 • Personalised financial insights
 • Partner offers and deals
@@ -84,7 +84,7 @@ If you have any questions, we're always here to help.
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
   {
     title: "Referral Payment Inquiry",
@@ -103,7 +103,7 @@ If it's been more than 30 days and you haven't received your reward, please repl
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
   {
     title: "Subscription Cancellation",
@@ -112,7 +112,7 @@ WeMoney Member Success`,
 
 We're sorry to see you go!
 
-Your WeMoney subscription has been cancelled as requested. You'll continue to have access to your current plan until {{end_date}}.
+Your WeSupport subscription has been cancelled as requested. You'll continue to have access to your current plan until {{end_date}}.
 
 After that date:
 • Your credit score monitoring will be paused
@@ -123,14 +123,14 @@ If there's anything we could have done better, we'd love to hear your feedback.
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
   {
-    title: "Welcome to WeMoney",
+    title: "Welcome to WeSupport",
     category: "General",
     body: `Hi {{customer_name}},
 
-Welcome to WeMoney! We're thrilled to have you on board. 🎉
+Welcome to WeSupport! We're thrilled to have you on board. 🎉
 
 Here's how to get the most out of your account:
 
@@ -143,7 +143,7 @@ If you need any help getting started, just reply to this email — we're here fo
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
   {
     title: "Generic Follow-up",
@@ -156,7 +156,7 @@ If you're still experiencing any issues or have further questions, please don't 
 
 Kind regards,
 {{agent_name}}
-WeMoney Member Success`,
+WeSupport Member Success`,
   },
 ];
 

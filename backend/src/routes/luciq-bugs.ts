@@ -53,7 +53,7 @@ const INITIAL_BUGS = [
     comments: [
       {
         id: "c_002_1",
-        from: { name: "Yogender", email: "kyc@wemoney.com.au" },
+        from: { name: "Yogender", email: "kyc@wesupport.com.au" },
         body: "Confirmed with Equifax — there was a delay in their API. Fix being deployed.",
         created_at: h(6),
         is_internal: true,
@@ -74,7 +74,7 @@ const INITIAL_BUGS = [
     comments: [
       {
         id: "c_003_1",
-        from: { name: "Chloe Koh", email: "hello@wemoney.com.au" },
+        from: { name: "Chloe Koh", email: "hello@wesupport.com.au" },
         body: "Escalated to Basiq support. They confirmed a configuration issue on our end. Working on fix.",
         created_at: h(4),
         is_internal: true,
@@ -97,7 +97,7 @@ const INITIAL_BUGS = [
   {
     id: "bug_005",
     title: "App crashes on iOS 17.4 when opening Insights tab",
-    description: "The WeMoney iOS app crashes immediately when navigating to the Insights tab. This was introduced in the latest app update (v3.2.1).\n\nDevice: iPhone 15 Pro, iOS 17.4\nApp version: 3.2.1\nCrash log: EXC_BAD_ACCESS (SIGSEGV)\n\nWorkaround: Uninstall and reinstall previous version (3.2.0) — but this is not ideal for users.",
+    description: "The WeSupport iOS app crashes immediately when navigating to the Insights tab. This was introduced in the latest app update (v3.2.1).\n\nDevice: iPhone 15 Pro, iOS 17.4\nApp version: 3.2.1\nCrash log: EXC_BAD_ACCESS (SIGSEGV)\n\nWorkaround: Uninstall and reinstall previous version (3.2.0) — but this is not ideal for users.",
     status: "in_progress",
     priority: "high",
     reporter: { name: "Robin Trotman", email: "sherrybobbin@hotmail.com" },
@@ -108,7 +108,7 @@ const INITIAL_BUGS = [
     comments: [
       {
         id: "c_005_1",
-        from: { name: "Engineering Team", email: "engineering@wemoney.com.au" },
+        from: { name: "Engineering Team", email: "engineering@wesupport.com.au" },
         body: "Identified the issue — a null pointer in the chart rendering library. Patch targeted for next release.",
         created_at: d(1),
         is_internal: true,
@@ -142,7 +142,7 @@ const INITIAL_BUGS = [
     comments: [
       {
         id: "c_007_1",
-        from: { name: "Engineering Team", email: "engineering@wemoney.com.au" },
+        from: { name: "Engineering Team", email: "engineering@wesupport.com.au" },
         body: "Root cause identified: Amex API returns a non-standard token expiry format. Fix in review.",
         created_at: h(14),
         is_internal: true,
@@ -152,7 +152,7 @@ const INITIAL_BUGS = [
   {
     id: "bug_008",
     title: "Marketing unsubscribe not working for partner emails",
-    description: "Users who have unsubscribed from marketing emails are still receiving partner offer emails. The unsubscribe link works for WeMoney newsletters but does not suppress partner offer campaigns.\n\nThe two email lists appear to be managed separately and the suppression list is not syncing between them.",
+    description: "Users who have unsubscribed from marketing emails are still receiving partner offer emails. The unsubscribe link works for WeSupport newsletters but does not suppress partner offer campaigns.\n\nThe two email lists appear to be managed separately and the suppression list is not syncing between them.",
     status: "open",
     priority: "medium",
     reporter: { name: "Chris Kinlyside", email: "chris.kinlyside@icloud.com" },

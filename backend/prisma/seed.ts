@@ -9,13 +9,13 @@ async function main() {
     const hash = await bcrypt.hash("admin123", 12);
     await prisma.user.create({
       data: {
-        email: "admin@wemoney.com.au",
+        email: "admin@wesupport.com.au",
         name: "Admin",
         passwordHash: hash,
         role: "admin",
       },
     });
-    console.log("Seeded admin user: admin@wemoney.com.au / admin123");
+    console.log("Seeded admin user: admin@wesupport.com.au / admin123");
   } else {
     console.log("Admin user already exists, skipping seed");
   }

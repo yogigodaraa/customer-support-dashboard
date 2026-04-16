@@ -36,7 +36,7 @@ A complete full-stack unified support dashboard with the following:
 ## 📁 File Structure
 
 ```
-/Users/intern/Downloads/wemoney/wesupport/
+wesupport/
 ├── frontend/
 │   ├── app/
 │   │   ├── layout.tsx         # Root layout
@@ -113,7 +113,7 @@ cp frontend/.env.local.example frontend/.env.local
 ### 4. **Install & Run**
 ```bash
 # Go to root directory
-cd /Users/intern/Downloads/wemoney/wesupport
+cd wesupport
 
 # Install all dependencies
 npm install --workspaces

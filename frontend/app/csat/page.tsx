@@ -80,7 +80,7 @@ function CsatForm() {
           {/* Logo / brand */}
           <div className="flex items-center gap-2 mb-8">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">W</div>
-            <span className="text-sm font-semibold text-gray-700">WeMoney Support</span>
+            <span className="text-sm font-semibold text-gray-700">WeSupport</span>
           </div>
 
           {/* Loading */}
@@ -98,7 +98,7 @@ function CsatForm() {
               <h2 className="text-lg font-semibold text-gray-800 mb-2">Survey not found</h2>
               <p className="text-sm text-gray-500">
                 This link may be invalid or expired. Please contact us at{" "}
-                <a href="mailto:support@wemoney.com.au" className="text-blue-600 hover:underline">support@wemoney.com.au</a>.
+                <a href="mailto:support@wesupport.com.au" className="text-blue-600 hover:underline">support@wesupport.com.au</a>.
               </p>
             </div>
           )}
@@ -208,7 +208,7 @@ function CsatForm() {
               )}
               <p className="text-xs text-gray-400 mt-4">
                 Need further help?{" "}
-                <a href="mailto:support@wemoney.com.au" className="text-blue-600 hover:underline">support@wemoney.com.au</a>
+                <a href="mailto:support@wesupport.com.au" className="text-blue-600 hover:underline">support@wesupport.com.au</a>
               </p>
             </div>
           )}

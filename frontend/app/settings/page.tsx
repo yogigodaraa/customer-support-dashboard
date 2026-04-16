@@ -80,7 +80,7 @@ function RichEditor({ value, onChange }: { value: string; onChange: (html: strin
         onInput={() => onChange(editorRef.current?.innerHTML ?? "")}
         className="min-h-[100px] px-3 py-2 text-sm text-gray-700 dark:text-gray-300 dark:bg-gray-700 focus:outline-none"
         style={{ fontFamily: "inherit" }}
-        data-placeholder="Kind regards,&#10;Your Name&#10;WeMoney Member Success"
+        data-placeholder="Kind regards,&#10;Your Name&#10;WeSupport Member Success"
       />
     </div>
   );

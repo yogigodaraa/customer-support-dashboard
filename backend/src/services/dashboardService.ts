@@ -141,7 +141,7 @@ const MOCK_STATS: DashboardStats = {
     { tag: "Billing",         count: 9,  color: "#10B981" },
     { tag: "Bug / Instabug",  count: 7,  color: "#EF4444" },
     { tag: "Credit Score",    count: 5,  color: "#8B5CF6" },
-    { tag: "WeMoney Pro",     count: 4,  color: "#6366F1" },
+    { tag: "WeSupport Pro",     count: 4,  color: "#6366F1" },
     { tag: "Socials",         count: 2,  color: "#EC4899" },
   ],
   slaHealth: { onTime: 76, atRisk: 15, breached: 9 },

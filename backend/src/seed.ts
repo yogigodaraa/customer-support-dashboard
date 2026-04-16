@@ -10,17 +10,17 @@ async function seedDemoData() {
 
   // Create admin user
   const demoUser = await prisma.user.upsert({
-    where: { email: "admin@wemoney.com" },
+    where: { email: "admin@wesupport.com" },
     update: { passwordHash: adminPasswordHash, role: "admin" },
     create: {
-      email: "admin@wemoney.com",
+      email: "admin@wesupport.com",
       name: "Admin",
       passwordHash: adminPasswordHash,
       role: "admin",
     },
   });
 
-  console.log("✓ Created admin user (admin@wemoney.com / admin123)");
+  console.log("✓ Created admin user (admin@wesupport.com / admin123)");
 
   console.log("✓ Created demo user");
 

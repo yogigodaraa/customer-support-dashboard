@@ -9,7 +9,7 @@ export const bugPatchSchema = z.object({
 export const bugCommentSchema = z.object({
   body: z.string().min(1, "Comment body is required").transform((s) => s.trim()),
   author_name: z.string().optional().default("Support Agent"),
-  author_email: z.string().optional().default("support@wemoney.com.au"),
+  author_email: z.string().optional().default("support@wesupport.com.au"),
   is_internal: z
     .union([z.boolean(), z.literal("true"), z.literal("false")])
     .transform((v) => v === true || v === "true")

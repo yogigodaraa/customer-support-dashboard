@@ -198,7 +198,7 @@ export default function ReplyComposer({ contactName, accent, replyEndpoint, onSe
     return text
       .replace(/\{\{customer_name\}\}/gi, firstName)
       .replace(/\{\{first_name\}\}/gi, firstName)
-      .replace(/\{\{agent_name\}\}/gi, "WeMoney Support")
+      .replace(/\{\{agent_name\}\}/gi, "WeSupport")
       .replace(/\{\{end_date\}\}/gi, new Date(Date.now() + 30 * 86400000).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }));
   }
 
