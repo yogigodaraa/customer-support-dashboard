@@ -1,0 +1,18 @@
+{
+  "name": "wesupport",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unified support platform integrating Luciq, Intercom, Front, and Retool",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"yarn workspace wesupport-frontend dev\" \"yarn workspace wesupport-backend dev\"",
+    "build": "yarn workspace wesupport-backend build && yarn workspace wesupport-frontend build",
+    "start": "yarn workspace wesupport-backend start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

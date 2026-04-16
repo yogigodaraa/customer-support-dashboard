@@ -1,0 +1,406 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  name                String?
+  image               String?   // base64 data URL or external URL
+  passwordHash        String    @default("")
+  role                String    @default("agent") // "admin" | "agent" | "viewer"
+  signature           String?
+  signatureHtml       String?   // rich HTML version of signature
+  theme               String    @default("light") // "light" | "dark"
+  timezone            String    @default("Australia/Sydney")
+  locale              String    @default("en-AU")
+  oooEnabled          Boolean   @default(false)
+  oooMessage          String?
+  oooUntil            DateTime?
+  soundNotifications  Boolean   @default(true)
+  desktopNotifications Boolean  @default(false)
+  twoFactorSecret     String?
+  twoFactorEnabled    Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  savedSearches    SavedSearch[]
+  auditLogs        AuditLog[]
+  internalNotes    InternalNote[]
+  kycAssignments   KycCase[]              @relation("KycAssignee")
+  notificationPref NotificationPreference?
+  teamMemberships  TeamMember[]
+  sessions         UserSession[]
+}
+
+model UserSession {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent    String?
+  ip           String?
+  createdAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model IntegrationKey {
+  id           String   @id @default(cuid())
+  service      String   @unique // "intercom" | "gmail" | "luciq" | "retool"
+  encryptedKey String
+  iv           String
+  label        String?
+  lastRotated  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String?
+  query     String
+  filters   Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model SyncLog {
+  id        String   @id @default(cuid())
+  source    String   // "front" | "intercom" | "luciq" | "retool"
+  status    String   // "success" | "failed" | "pending"
+  message   String?
+  lastSync  DateTime?
+  nextSync  DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([source])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String   // "search" | "delete_user" | "view_details"
+  resource  String   // user_id or email being acted upon
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model CachedData {
+  id         String    @id @default(cuid())
+  source     String    // "front" | "intercom" | "luciq" | "retool"
+  identifier String    // email or user_id
+  data       Json
+  expiresAt  DateTime? // null = never expires; set for TTL-based cache entries
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([source, identifier])
+  @@index([source])
+  @@index([identifier])
+  @@index([expiresAt])
+}
+
+model Template {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  category  String   @default("General")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+}
+
+// ─── Phase 2: Conversation Metadata Overlay ─────────────────────────────────
+// Conversations live in external APIs. This model stores local metadata
+// (tags, snooze, SLA timestamps) keyed on channel + externalId.
+
+model ConversationMeta {
+  id              String    @id @default(cuid())
+  channel         String    // "intercom" | "gmail" | "luciq"
+  externalId      String    // Intercom conversation ID, Gmail thread ID, Luciq bug ID
+  snoozedUntil    DateTime?
+  slaBreachedAt   DateTime?
+  firstResponseAt DateTime?
+  resolvedAt      DateTime?
+  isPinned        Boolean   @default(false)
+  priority        String    @default("normal") // "urgent" | "high" | "normal" | "low"
+  dueAt           DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  tags         ConversationTag[]
+  notes        InternalNote[]
+  slaSnapshots SlaSnapshot[]
+
+  @@unique([channel, externalId])
+  @@index([channel])
+  @@index([snoozedUntil])
+  @@index([isPinned])
+  @@index([priority])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String   @default("#6B7280")
+  createdAt DateTime @default(now())
+
+  conversations ConversationTag[]
+}
+
+model ConversationTag {
+  conversationMetaId String
+  tagId              String
+  addedAt            DateTime @default(now())
+  addedByUserId      String?
+
+  conversationMeta ConversationMeta @relation(fields: [conversationMetaId], references: [id], onDelete: Cascade)
+  tag              Tag              @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([conversationMetaId, tagId])
+}
+
+model InternalNote {
+  id                 String   @id @default(cuid())
+  conversationMetaId String
+  authorId           String
+  body               String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  conversationMeta ConversationMeta @relation(fields: [conversationMetaId], references: [id], onDelete: Cascade)
+  author           User             @relation(fields: [authorId], references: [id])
+}
+
+model SlaPolicy {
+  id            String   @id @default(cuid())
+  name          String
+  channel       String   @default("*") // "intercom" | "gmail" | "luciq" | "*"
+  priority      String   @default("*") // "critical" | "high" | "medium" | "low" | "*"
+  frtTargetMins Int      // First Response Time target in minutes
+  resTargetMins Int      // Resolution Time target in minutes
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SlaSnapshot {
+  id                 String   @id @default(cuid())
+  conversationMetaId String
+  policyId           String?
+  frtMins            Int?     // actual first response time in minutes
+  resMins            Int?     // actual resolution time in minutes
+  frtStatus          String?  // "on_time" | "at_risk" | "breached"
+  resStatus          String?  // "on_time" | "at_risk" | "breached"
+  recordedAt         DateTime @default(now())
+
+  conversationMeta ConversationMeta @relation(fields: [conversationMetaId], references: [id], onDelete: Cascade)
+}
+
+// ─── Phase 4: Settings & Admin Maturity ─────────────────────────────────────
+
+model WorkspaceSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model NotificationPreference {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  emailOnAssign     Boolean @default(true)
+  emailOnMention    Boolean @default(true)
+  emailOnKycStatus  Boolean @default(false)
+  inAppOnAssign     Boolean @default(true)
+  inAppOnMention    Boolean @default(true)
+  inAppOnSlaWarning Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  color       String       @default("#6366F1")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  members TeamMember[]
+}
+
+model TeamMember {
+  teamId   String
+  userId   String
+  role     String   @default("member") // "lead" | "member"
+  joinedAt DateTime @default(now())
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([teamId, userId])
+}
+
+// ─── Phase 5: Intelligence & Scale ──────────────────────────────────────────
+
+model AutomationRule {
+  id            String    @id @default(cuid())
+  name          String
+  description   String?
+  isActive      Boolean   @default(true)
+  trigger       String
+  // "conversation_opened"|"message_received"|"sla_at_risk"|"kyc_created"|"tag_added"|"conversation_assigned"
+  triggerConfig Json?     // { channel?, tagId?, priority?, riskLevel? }
+  actions       Json
+  // Array<{ type: "add_tag"|"notify_agent"|"escalate_kyc"|"close_conversation", params: {...} }>
+  runCount      Int       @default(0)
+  lastRunAt     DateTime?
+  createdBy     String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([trigger, isActive])
+}
+
+model CsatSurvey {
+  id            String    @id @default(cuid())
+  channel       String
+  externalId    String
+  customerEmail String
+  token         String    @unique @default(cuid())
+  sentAt        DateTime  @default(now())
+  respondedAt   DateTime?
+  score         Int?      // 1-5
+  feedback      String?
+  agentId       String?
+
+  @@index([channel, externalId])
+  @@index([sentAt])
+}
+
+model ScheduledReport {
+  id          String    @id @default(cuid())
+  name        String
+  schedule    String    // cron expression e.g. "0 9 * * 1"
+  metrics     Json      // ["summary","slaHealth","tagBreakdown","kycStats"]
+  recipients  Json      // ["email@example.com"]
+  isActive    Boolean   @default(true)
+  lastSentAt  DateTime?
+  createdBy   String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// ─── Phase 3: KYC Pipeline ────────────────────────────────────────────────────
+
+model KycCase {
+  id              String    @id @default(cuid())
+  customerName    String
+  customerEmail   String
+  customerId      String?
+  status          String    @default("pending")
+  // "pending" | "in_review" | "approved" | "rejected" | "escalated"
+  riskLevel       String    @default("medium") // "low" | "medium" | "high"
+  isPriority      Boolean   @default(false)
+  assigneeId      String?
+  gmailThreadId   String?
+  rejectionReason String?
+  checklist       Json?
+  // { id_verified: bool|null, address_verified: bool|null, face_match: bool|null }
+  reviewedAt      DateTime?
+  completedAt     DateTime?
+  docsExpiresAt   DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  assignee    User?          @relation("KycAssignee", fields: [assigneeId], references: [id])
+  documents   KycDocument[]
+  auditLogs   KycAuditLog[]
+
+  @@index([status])
+  @@index([customerEmail])
+  @@index([assigneeId])
+  @@index([createdAt])
+}
+
+model KycDocument {
+  id          String    @id @default(cuid())
+  caseId      String
+  type        String
+  // "passport" | "drivers_license" | "utility_bill" | "bank_statement" | "selfie" | "other"
+  fileName    String
+  fileSize    Int
+  mimeType    String
+  storagePath String    // relative path under uploads/kyc/
+  status      String    @default("pending") // "pending" | "accepted" | "rejected"
+  reviewNote  String?
+  uploadedAt  DateTime  @default(now())
+  reviewedAt  DateTime?
+
+  case KycCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+}
+
+model KycAuditLog {
+  id         String   @id @default(cuid())
+  caseId     String
+  agentId    String
+  action     String
+  // "created" | "status_changed" | "document_uploaded" | "document_reviewed"
+  // | "assigned" | "checklist_updated" | "escalated"
+  fromStatus String?
+  toStatus   String?
+  details    Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  case KycCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([createdAt])
+}
+
+// ─── Admin: Webhooks & Blocked Contacts ────────────────────────────────────
+
+model Webhook {
+  id          String    @id @default(cuid())
+  name        String
+  url         String
+  events      Json      // string[] e.g. ["conversation.created","kyc.status_changed"]
+  secret      String?   // HMAC signing secret
+  isActive    Boolean   @default(true)
+  lastPingedAt DateTime?
+  lastStatus  String?   // "ok" | "failed" | "timeout"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model BlockedContact {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  userId    String?
+  reason    String?
+  blockedBy String
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}

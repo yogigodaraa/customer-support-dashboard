@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(__NEW_LINE_8de949bef588c8ac__ echo \"=== All channels ===\")",
+      "Bash(curl -s \"https://api2.frontapp.com/channels\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(__NEW_LINE_9be6add183ebdbf8__ echo \"=== Get conversation messages to find channel ===\")",
+      "Bash(curl -s \"https://api2.frontapp.com/conversations/cnv_1lmvbje0/messages\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(python3 -c \":*)",
+      "Bash(curl -s http://localhost:3001/api/front/conversations/cnv_1lmvbje0)",
+      "Bash(curl -s http://localhost:3001/api/front/teammates)",
+      "Bash(curl -s 'http://localhost:3001/api/gmail/threads?channel=support')",
+      "Bash(curl -s 'http://localhost:3001/api/gmail/threads?channel=support&status=trash')",
+      "Bash(python3 -c \"import sys, json; d=json.load\\(sys.stdin\\); print\\(f''Trash: {len\\(d[\"\"conversations\"\"]\\)} conversations''\\)\")",
+      "Bash(curl -s 'http://localhost:3001/api/gmail/threads?channel=support&status=promotions')",
+      "Bash(python3 -c \"import sys, json; d=json.load\\(sys.stdin\\); print\\(f''Promotions: {len\\(d[\"\"conversations\"\"]\\)} conversations''\\)\")",
+      "Bash(curl -s -X POST 'http://localhost:3001/api/search' -H 'Content-Type: application/json' -d '{\"\"email\"\":\"\"ygodara0502@gmail.com\"\"}')",
+      "Bash(npx prisma migrate dev --name add_auth_settings_admin --create-only)",
+      "Bash(npx prisma db push)",
+      "Bash(npx prisma db seed)",
+      "Bash(node -e \"const { totp } = require\\(''@otplib/preset-default''\\); const s = totp.generateSecret\\(\\); const t = totp.generate\\(s\\); console.log\\(''verify:'', totp.verify\\({ token: t, secret: s }\\)\\);\")",
+      "Bash(node -e \"const lib = require\\(''@otplib/preset-default''\\); console.log\\(Object.keys\\(lib\\)\\); const { generateSecret, totp } = lib; const s = generateSecret\\(\\); const t = totp.generate\\(s\\); console.log\\(''generated'', t\\); console.log\\(''verify:'', totp.verify\\({ token: t, secret: s }\\)\\);\")",
+      "Bash(node -e \"const { totp } = require\\(''@otplib/preset-default''\\); console.log\\(Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(totp\\)\\)\\); const s = ''12345678901234567890''; const t = totp.generate\\(s\\); console.log\\(''tok:'', t\\); console.log\\(''verify:'', totp.verify\\({ token: t, secret: s }\\)\\);\")"
+    ]
+  }
+}

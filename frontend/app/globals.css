@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #f9fafb;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container-main {
+  @apply min-h-screen bg-gray-50;
+}
+
+.sidebar {
+  @apply w-64 bg-white border-r border-gray-200;
+}
+
+.main-content {
+  @apply flex-1;
+}
+
+/* Toast slide-in animation */
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.toast-slide-in {
+  animation: toast-slide-in 0.2s ease-out forwards;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+/* AI panel slide-in animation */
+@keyframes ai-panel-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.ai-panel-slide-in {
+  animation: ai-panel-slide-in 0.25s ease-out forwards;
+}
+
+/* AI typing dots */
+@keyframes ai-typing-dot {
+  0%, 20% { opacity: 0.3; }
+  50% { opacity: 1; }
+  80%, 100% { opacity: 0.3; }
+}
+
+.ai-typing-dot {
+  animation: ai-typing-dot 1.4s infinite;
+}
+.ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Mobile responsive helpers ──────────────────────────────────────────────── */
+
+/* On small screens, hide sidebar and show a bottom nav instead */
+@media (max-width: 768px) {
+  /* Sidebar collapses to icon-only strip */
+  .sidebar-nav-label {
+    display: none;
+  }
+
+  /* Three-panel layouts: stack vertically */
+  .three-panel-layout {
+    flex-direction: column;
+  }
+
+  /* Conversation list becomes full-width sheet on mobile */
+  .conversation-list-panel {
+    width: 100% !important;
+    height: 40vh;
+    overflow-y: auto;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  /* Customer panel hidden on small screens */
+  .customer-panel {
+    display: none;
+  }
+
+  /* Stat cards: 2 columns instead of 4 */
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Focus-visible ring style */
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, select, textarea {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+/* Scoped styles for rendered email HTML bodies */
+.email-html-body {
+  max-width: 100%;
+  overflow-x: auto;
+  word-break: break-word;
+}
+.email-html-body a { color: #2563eb; text-decoration: underline; }
+.email-html-body img { max-width: 100%; height: auto; }
+.email-html-body table { border-collapse: collapse; max-width: 100%; }
+.email-html-body p { margin-bottom: 0.5em; }
+.email-html-body ul, .email-html-body ol { padding-left: 1.5em; margin-bottom: 0.5em; }
