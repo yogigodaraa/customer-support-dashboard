@@ -1,232 +1,52 @@
-# WeSupport - Unified Support Dashboard
+# WeSupport
 
-A unified platform that integrates Luciq (bugs), Intercom (questions), Front (support), and Retool (user management) into a single dashboard.
+A unified customer support dashboard that consolidates **Luciq** (bugs), **Intercom** (messaging), **Front** (team email), and **Retool** (user management) into a single searchable view.
 
-## 📋 Features
+## What it does
 
-- 🔍 **Unified Search** - Search across all platforms by email or user ID
-- 📊 **Real-time Sync** - Automatic data synchronization every 5 minutes
-- 🏠 **Centralized Dashboard** - View data from Luciq, Intercom, Front all in one place
-- 💾 **Intelligent Caching** - Faster searches with automatic cache management
-- 📈 **Integration Status** - Monitor sync status of all connected platforms
-- 🔐 **Secure** - OAuth authentication with audit logs
+Instead of tab-hopping across four tools to piece together a single customer's history, WeSupport pulls everything by email or user ID into one place:
 
-## 🏗️ Project Structure
+- Unified search across all connected platforms
+- Centralized dashboard with open bugs, conversations, and tickets per user
+- Automatic background sync every 5 minutes
+- Intelligent caching for faster repeat lookups
+- Real-time WebSocket updates
+- Integration status monitoring
 
-```
-wesupport/
-├── frontend/              # Next.js frontend application
-│   ├── app/              # App router pages
-│   ├── components/       # React components
-│   ├── package.json
-│   └── tsconfig.json
-├── backend/              # Express.js backend API
-│   ├── src/
-│   │   ├── index.ts      # Main server file
-│   │   ├── services/     # Integration services
-│   │   ├── routes/       # API endpoints
-│   │   └── utils/        # Helper utilities
-│   ├── prisma/           # Database schema
-│   └── package.json
-└── package.json          # Root workspace config
-```
+## Tech stack
 
-## 🚀 Quick Start
+Yarn workspace monorepo.
 
-### Prerequisites
-- Node.js 18+ & npm/yarn
-- PostgreSQL database
-- API keys for: Front, Intercom, Luciq, Retool
+**Frontend** (`frontend/`) — Next.js 14 + React 18 + TypeScript
+**Backend** (`backend/`) — Express.js + TypeScript + Prisma ORM + PostgreSQL
+**Auth** — OAuth with each integrated provider
 
-### 1. Setup Database
+## Getting started
 
 ```bash
-createdb wesupport
+yarn install
+yarn dev        # runs frontend (3000) + backend (3001) concurrently
 ```
 
-### 2. Install Dependencies
+Copy `.env.example` to `.env` in both `frontend/` and `backend/` and fill in:
 
-```bash
-# Install root dependencies
-npm install
+- `LUCIQ_API_KEY`
+- `INTERCOM_ACCESS_TOKEN`
+- `FRONT_API_KEY`
+- `RETOOL_API_KEY`
+- `DATABASE_URL` (backend)
 
-# Install workspace dependencies
-npm install --workspaces
+See `API_SETUP_GUIDE.md` for step-by-step provider setup.
+
+## Project structure
+
+```
+frontend/       Next.js dashboard (App Router)
+backend/        Express API + Prisma + OAuth integrations
+setup.sh        Bootstrap script
+docs/           Build summary, file structure, user guide
 ```
 
-### 3. Configure Environment Variables
+## Status
 
-**Backend** - Create `backend/.env`:
-```bash
-cp backend/.env.example backend/.env
-# Edit with your actual API keys and database URL
-```
-
-**Frontend** - Create `frontend/.env.local`:
-```bash
-cp frontend/.env.local.example frontend/.env.local
-```
-
-### 4. Setup Database Schema
-
-```bash
-cd backend
-npm run prisma:migrate
-npm run prisma:generate
-cd ..
-```
-
-### 5. Run Development Servers
-
-```bash
-# From root directory
-npm run dev
-
-# Or run individually:
-# Terminal 1:
-cd backend && npm run dev
-
-# Terminal 2:
-cd frontend && npm run dev
-```
-
-Frontend: http://localhost:3000  
-Backend: http://localhost:3001
-
-## 📚 API Documentation
-
-### Search Endpoints
-
-#### POST `/api/search`
-Search across all integrated platforms.
-
-**Request:**
-```json
-{
-  "email": "user@example.com"
-  // or
-  "userId": "12345"
-}
-```
-
-**Response:**
-```json
-{
-  "front": [...],
-  "intercom": [...],
-  "luciq": [...],
-  "timestamp": "2024-01-01T12:00:00Z"
-}
-```
-
-### Integration Endpoints
-
-#### GET `/api/integrations/status`
-Get current sync status of all integrations.
-
-**Response:**
-```json
-{
-  "front": {
-    "status": "success",
-    "lastSync": "2024-01-01T12:00:00Z",
-    "nextSync": "2024-01-01T12:05:00Z"
-  },
-  "intercom": {...},
-  "luciq": {...}
-}
-```
-
-#### GET `/api/integrations/sync-logs`
-Get recent sync logs.
-
-## 🔌 Integration Setup
-
-### 1. Front API Key
-- Go to [Front Dashboard](https://app.frontapp.com)
-- Settings → Developer → Create API token
-- Add to `backend/.env` as `FRONT_API_KEY`
-
-### 2. Intercom Access Token
-- Go to [Intercom Developer Hub](https://developers.intercom.com)
-- Create new app
-- Generate access token
-- Add to `backend/.env` as `INTERCOM_ACCESS_TOKEN`
-
-### 3. Luciq API Key
-- Contact Luciq support for API access
-- Add to `backend/.env` as `LUCIQ_API_KEY`
-
-### 4. Retool API Key
-- Go to Retool Account Settings
-- Generate API key
-- Add to `backend/.env` as `RETOOL_API_KEY` (future integration)
-
-## 🔄 Data Sync
-
-The platform automatically syncs data every 5 minutes:
-- Fetches contacts from Front & Intercom
-- Fetches bugs from Luciq
-- Caches all results in PostgreSQL
-- Logs all sync operations
-
-View sync history at: `/api/integrations/sync-logs`
-
-## 🛠️ Development
-
-### Build Frontend
-```bash
-cd frontend
-npm run build
-npm start
-```
-
-### Build Backend
-```bash
-cd backend
-npm run build
-npm start
-```
-
-### Database Schema
-Edit `backend/prisma/schema.prisma` then:
-```bash
-cd backend
-npm run prisma:migrate -- --name your_migration_name
-```
-
-## 📦 Deployment
-
-### Vercel (Frontend)
-```bash
-# Connect GitHub repo
-vercel link
-vercel deploy
-```
-
-### Self-hosted (Backend)
-```bash
-cd backend
-npm run build
-NODE_ENV=production npm start
-```
-
-Set environment variables on your hosting platform.
-
-## 🤝 Future Roadmap
-
-- [ ] Retool user deletion integration
-- [ ] Real-time WebSocket updates
-- [ ] Advanced filtering & saved searches
-- [ ] User deletion workflows
-- [ ] Bulk operations
-- [ ] Custom dashboards
-- [ ] Email notifications
-
-## 📝 License
-
-MIT
-
-## 💬 Support
-
-For issues or questions, reach out to the team.
+Active development. Internal tool. Build details in `BUILD_SUMMARY.md`.
